@@ -1,0 +1,30 @@
+CREATE TABLE IF NOT EXISTS `seatbookingdb`.`seats` (
+  `id` BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `name` VARCHAR(256) NOT NULL,
+  `create_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  index (name));
+
+CREATE TABLE IF NOT EXISTS `seatbookingdb`.`users` (
+  `id` BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `username` VARCHAR(256) NOT NULL,
+  `password` VARCHAR(256) NOT NULL,
+  `create_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  index (username));
+
+CREATE TABLE IF NOT EXISTS `seatbookingdb`.`schedules` (
+  `id` BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  `date` DATETIME NOT NULL,
+  `username` VARCHAR(256) NOT NULL,
+  `seatname` VARCHAR(256) NOT NULL,
+  `create_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_date` DATETIME NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  FOREIGN KEY (username) REFERENCES users(username),
+  FOREIGN KEY (seatname) REFERENCES seats(name));
+
+INSERT INTO seats (name) VALUES ("A");
+
+INSERT INTO users (username, password) VALUES ("testuser", "123456");
+
+INSERT INTO schedules (date, username, seatname) VALUES (CURRENT_DATE, "testuser", "A");

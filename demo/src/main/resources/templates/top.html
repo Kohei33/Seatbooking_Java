@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<head>
+    <title>Seat booking</title>
+</head>
+<body>
+    <h1>Seat booking</h1>
+    <button onclick="location.href='http://localhost:8080'">HOME</button>
+    <table>
+        <tr>
+            <th>
+                <form id="toBeforeForm" action="/toBefore" method="POST">
+                    <input type="hidden" name="baseDate" th:value="${days[0]}">
+                    <a href="javascript:toBeforeForm.submit()">＜</a>
+                </form>
+            </th>
+            <th>
+                <div th:text="${#dates.format(days[0], 'yyyy-MM-dd(E)')} + '～' + ${#dates.format(days[#lists.size(days)-1], 'yyyy-MM-dd(E)')} "></div>
+            </th>
+            <th>
+                <form id="toAfterForm" action="/toAfter" method="POST">
+                    <input type="hidden" name="baseDate" th:value="${days[#lists.size(days)-1]}">
+                    <a href="javascript:toAfterForm.submit()">＞</a>
+                </form>
+            </th>
+        </tr>
+    </table>
+    <form action="/book" method="POST">
+    <table border="1" style="border-collapse:collapse;">
+        <tr>
+            <th>Seat ID</th>
+            <th:block th:each="day : ${days}">
+                <th th:text="${#dates.format(day, 'dd(E)')}"></th>
+            </th:block>
+        </tr>
+        <th:block th:each="map1 : ${map1}">
+            <tr>
+                <th th:text="'Seat ' + ${map1.key}"></th>
+                <th:block th:each="map2 : ${map1.value}">
+                    <td>
+                        <th:block th:if="${map2.value == '○'}" th:object="${reserveForm}">
+                            <input type="checkbox" th:value="${map1.key} + '/' + ${map2.key}" th:field="*{checklist}">
+                        </th:block>
+                        <th:block th:unless="${map2.value == '○'}">
+                            <div th:text="${map2.value}">
+                        </th:block>
+                    </td>
+                </th:block>
+            </tr>
+        </th:block>
+            
+    </table>
+    <button type="submit">Book selected items</button>
+    </form>
+    <div th:text="${message}"></div>
+</body>
