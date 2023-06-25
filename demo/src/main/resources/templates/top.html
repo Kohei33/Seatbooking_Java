@@ -3,22 +3,26 @@
     <title>Seat booking</title>
 </head>
 <body>
+    <button th:attr="onclick='location.href=\''+${homeUrl}+'\''">HOME</button>
+    <button th:attr="onclick='location.href=\''+${myPageUrl}+'\''">My page</button>
+    <p th:text="'Login user: ' + ${loginUsername}">
     <h1>Seat booking</h1>
-    <button onclick="location.href='http://localhost:8080'">HOME</button>
     <table>
         <tr>
             <th>
                 <form id="toBeforeForm" action="/toBefore" method="POST">
                     <input type="hidden" name="baseDate" th:value="${days[0]}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     <a href="javascript:toBeforeForm.submit()">＜</a>
                 </form>
             </th>
             <th>
-                <div th:text="${#dates.format(days[0], 'yyyy-MM-dd(E)')} + '～' + ${#dates.format(days[#lists.size(days)-1], 'yyyy-MM-dd(E)')} "></div>
+                <div th:text="${#temporals.format(days[0], 'yyyy-MM-dd(E)')} + '～' + ${#temporals.format(days[#lists.size(days)-1], 'yyyy-MM-dd(E)')} "></div>
             </th>
             <th>
                 <form id="toAfterForm" action="/toAfter" method="POST">
-                    <input type="hidden" name="baseDate" th:value="${days[#lists.size(days)-1]}">
+                    <input type="hidden" name="baseDate" th:value="${days[0]}">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     <a href="javascript:toAfterForm.submit()">＞</a>
                 </form>
             </th>
@@ -29,7 +33,7 @@
         <tr>
             <th>Seat ID</th>
             <th:block th:each="day : ${days}">
-                <th th:text="${#dates.format(day, 'dd(E)')}"></th>
+                <th th:text="${#temporals.format(day, 'dd(E)')}"></th>
             </th:block>
         </tr>
         <th:block th:each="map1 : ${map1}">
@@ -37,8 +41,8 @@
                 <th th:text="'Seat ' + ${map1.key}"></th>
                 <th:block th:each="map2 : ${map1.value}">
                     <td>
-                        <th:block th:if="${map2.value == '○'}" th:object="${reserveForm}">
-                            <input type="checkbox" th:value="${map1.key} + '/' + ${map2.key}" th:field="*{checklist}">
+                        <th:block th:if="${map2.value == '○'}" th:object="${checkList}">
+                            <input type="checkbox" th:value="${map1.key} + '/' + ${map2.key}" th:field="*{checkList}">
                         </th:block>
                         <th:block th:unless="${map2.value == '○'}">
                             <div th:text="${map2.value}">
@@ -49,6 +53,7 @@
         </th:block>
             
     </table>
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     <button type="submit">Book selected items</button>
     </form>
     <div th:text="${message}"></div>

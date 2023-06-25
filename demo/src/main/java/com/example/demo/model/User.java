@@ -1,7 +1,7 @@
-package com.example.demo.entity;
+package com.example.demo.model;
 
 import java.math.BigInteger;
-import java.sql.Date;
+import java.time.LocalDateTime;
 import java.util.Collection;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -17,9 +17,9 @@ public class User implements UserDetails{
 
     private String password;
 
-    private Date create_date;
+    private LocalDateTime create_date;
 
-    private Date update_date;
+    private LocalDateTime update_date;
 
     // 以下はログインで使用する
     @Override

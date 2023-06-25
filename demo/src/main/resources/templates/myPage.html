@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<head>
+    <title>My page</title>
+</head>
+<body>
+    <button th:attr="onclick='location.href=\''+${homeUrl}+'\''">HOME</button>
+    <p th:text="'Login user: ' + ${loginUsername}">
+    <h1>My page</h1>
+    <h2>Schedule list</h2>
+    <form action="" method="POST">
+        <th:block th:if="${#lists.size(scheduleList)} != 0">
+            <th:block th:each="schedule : ${scheduleList}" th:object="${checkList}">
+                <ul>
+                    <li style="list-style:none">
+                        <input type="checkbox" th:text="${schedule.date} + ', Seat' + ${schedule.seatname}"
+                            th:value="${schedule.seatname} + '/' + ${schedule.date}" th:field="*{checkList}">
+                    </li>
+                </ul>
+            </th:block>
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <button type="submit">Delete selected items</button>
+        </th:block>
+        <th:block th:if="${#lists.size(scheduleList)} == 0">
+            <div>No item</div>
+        </th:block>
+    </form>
+</body>
